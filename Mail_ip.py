@@ -4,9 +4,9 @@ import socket
 from email.mime.text import MIMEText
 import datetime
 # Change to your own account information
-to = 'tushargenius2013@gmail.com'
-gmail_user = 'raspicamera03@gmail.com'
-gmail_password = 'R@spberryPi3'
+to = 'toaddress@gmail.com'
+gmail_user = 'fromaddress@gmail.com'
+gmail_password = 'Password'
 smtpserver = smtplib.SMTP_SSL('smtp.gmail.com', 465)
 #smtpserver.ehlo()
 #smtpserver.starttls()
