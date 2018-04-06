@@ -11,9 +11,9 @@ db = MySQLdb.connect(host = "localhost", user = "root", passwd = "raspberry", db
 curs=db.cursor()
 
 print("System Working")
-SMTP_USERNAME = 'raspicamera03@gmail.com'
-SMTP_PASSWORD = 'R@spberryPi3'
-SMTP_RECIPIENT = 'tushargenius2013@gmail.com'
+SMTP_USERNAME = 'fromaddress@gmail.com'
+SMTP_PASSWORD = 'Password'
+SMTP_RECIPIENT = 'toaddress@gmail.com'
 SMTP_SERVER = 'smtp.gmail.com'
 SSL_PORT = 465
 
@@ -31,7 +31,7 @@ def write_db(name):
     TIME = time.strftime('%H:%M:%S')
     print("Writing into Database")
     try:
-        curs.execute("""INSERT INTO Visitors (Date, Time, Name) values(%s, %s, %s)""",(DATE,TIME,name))
+        curs.execute("""INSERT INTO Table (Date, Time, Name) values(%s, %s, %s)""",(DATE,TIME,name))
         db.commit()
 
     except:
