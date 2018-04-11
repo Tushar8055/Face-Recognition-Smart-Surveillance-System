@@ -11,19 +11,21 @@ db = MySQLdb.connect(host = "localhost", user = "root", passwd = "raspberry", db
 curs=db.cursor()
 
 print("System Working")
-SMTP_USERNAME = 'fromaddress@gmail.com'
-SMTP_PASSWORD = 'Password'
-SMTP_RECIPIENT = 'toaddress@gmail.com'
+SMTP_USERNAME = 'raspicamera03@gmail.com'
+SMTP_PASSWORD = 'R@spberryPi3'
+SMTP_RECIPIENT = 'tushargenius2013@gmail.com'
 SMTP_SERVER = 'smtp.gmail.com'
 SSL_PORT = 465
 
-led=17
+led1=17
+led=12
 pir=18
 HIGH=1
 LOW=0
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(led,GPIO.OUT)
+GPIO.setup(led1,GPIO.OUT)
 GPIO.setup(pir,GPIO.IN)
 
 def write_db(name):
@@ -31,38 +33,50 @@ def write_db(name):
     TIME = time.strftime('%H:%M:%S')
     print("Writing into Database")
     try:
-        curs.execute("""INSERT INTO Table (Date, Time, Name) values(%s, %s, %s)""",(DATE,TIME,name))
+        curs.execute("""INSERT INTO Visitors (Date, Time, Name) values(%s, %s, %s)""",(DATE,TIME,name))
         db.commit()
 
     except:
         db.rollback()
 
+def verify(name):
+    namelist = ['Tushar', 'Aman', 'Vishu', 'Hasan', 'Rupinder', 'Mukesh']
+    if name in namelist:
+        GPIO.output(led,HIGH)
+        time.sleep(3)
+        GPIO.output(led,LOW)
+    else:
+        GPIO.output(led,LOW)
+
 def sendMail():
+    print("Connected to mail")
+    print("Composing Mail")
     toaddr = SMTP_RECIPIENT
     fromaddr = SMTP_USERNAME
     mail = MIMEMultipart()
     mail.preamble = 'Rpi Sends image'
     mail['Subject'] = "Movement Detected"
     body = " has entered the premises"
-
     os.system("python CheckFace.py -dir '/home/pi/scripts/camera/Intruder.jpg'")
     name = ""
     for item in os.listdir('/home/pi/scripts/camera/'):
         name  = item
         break
-    
+
     append = ""
-    
+
     for i in range(len(name)):
         if name[i]=='.':
             break
-        append += name[i]  
-    
+        append += name[i]
+
     if append == "Intruder":
         body = "Intruder"+body
     else:
         body = append+body
-    
+
+    verify(append)
+
     attachment = open('/home/pi/scripts/camera/'+name, 'rb')
     image=MIMEImage(attachment.read())
     attachment.close()
@@ -90,21 +104,20 @@ def capture_image():
     if out [2] == '6':
         print('Shutdown detected')
         exit(0)
-    print("Connected to mail")
     sendMail()
 
 while True:
     if GPIO.input(pir)==1:
         print("Movement Detected")
-        GPIO.output(led, HIGH)
-        GPIO.output(led, LOW)
-        GPIO.output(led, HIGH)
+        GPIO.output(led1, HIGH)
         capture_image()
+        GPIO.output(led1, LOW)
+        GPIO.output(led1, HIGH)
         while(GPIO.input(pir)==1):
             time.sleep(1)
-        
+
     else:
-        GPIO.output(led, LOW)
+        GPIO.output(led1, LOW)
         time.sleep(0.01)
 
 GPIO.cleanup()
