@@ -6,13 +6,13 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from subprocess import call
 
-db = MySQLdb.connect(host = "localhost", user = "root", passwd = "raspberry", db = "mydb")
+db = MySQLdb.connect(host = "localhost", user = "root", passwd = "Password", db = "mysql")
 curs=db.cursor()
 
 print("System Working")
-SMTP_USERNAME = 'raspicamera03@gmail.com'
-SMTP_PASSWORD = 'R@spberryPi3'
-SMTP_RECIPIENT = 'tushargenius2013@gmail.com'
+SMTP_USERNAME = 'fromaddress@gmail.com'
+SMTP_PASSWORD = 'Password'
+SMTP_RECIPIENT = 'toaddress@gmail.com'
 SMTP_SERVER = 'smtp.gmail.com'
 SSL_PORT = 465
 
@@ -39,7 +39,7 @@ def write_db(name):
         db.rollback()
 
 def verify(name):
-    namelist = ['Tushar', 'Aman', 'Vishu', 'Hasan', 'Rupinder', 'Mukesh']
+    namelist = ['John', 'Victor', 'James', 'Sara', 'Barry', 'Richard']
     if name in namelist:
         GPIO.output(led,HIGH)
         time.sleep(3)
